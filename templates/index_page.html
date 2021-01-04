@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Cliber</title>
+</head>
+<body class="column is-12 columns is-multiline is-centered">
+    <h1 class="column is-12 has-text-dark is-size-1 has-text-centered">Cliber</h1>
+    <ul class="column is-11 columns is-multiline">
+        {% for user in users.items %}
+        <div class="card column is-2">
+            <div class="card-image">
+                <figure class="image is-4by3">
+                  <img src="{{user.image_url}}" alt="Placeholder image">
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <figure class="image is-48x48">
+                      <img src="{{user.image_url}}" alt="Placeholder image">
+                    </figure>
+                  </div>
+                  <div class="media-content">
+                    <p class="title is-4"><a href="{{ user.link }}" target="_blank">{{ user.username }}</a></p>
+                    <p class="subtitle is-6"><a href="{{ user.link }}" target="_blank">{{ user.username }}</a></p>
+                  </div>
+                </div>
+              </div>
+        </div>
+        {% endfor %}
+    </ul>
+    <nav class="pagination is-centered" style="margin-bottom: 50px;" role="navigation" aria-label="pagination">
+        <!-- previous page -->
+        {% if users.has_prev %}
+            <a class="pagination-previous" href="{{ url_for('home_test', page=users.prev_num) }}">Previous</a>
+        {% endif %}
+        <!-- next page -->
+        {% if users.has_next %}
+            <a class="pagination-next" href="{{ url_for('home_test', page=users.next_num) }}">Next</a>
+        {% endif %}
+
+        <ul class="pagination-list">
+            <!-- all page numbers -->
+            {% for page_num in users.iter_pages() %}
+                {% if page_num %}
+                    {% if page_num != users.page %}
+                        <li>
+                            <a class="pagination-link" href="{{ url_for('home_test', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li >
+                            <a class="pagination-link is-current" href="#">{{ page_num }}</a>
+                        </li>
+                    {% endif %}
+                {% else %}
+                    <li>
+                        <span class="pagination-ellipsis">…</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+</body>
+</html>

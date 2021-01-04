@@ -20,7 +20,7 @@ def saveUsers( cursor, sqliteConnection, total=150):
                                     ", '" + user["login"] + 
                                     "', '" + user["avatar_url"] + 
                                     "', '" + user["type"] + 
-                                    "', '" + user["url"] + "'),")
+                                    "', '" + user["html_url"] + "'),")
 
         lastC = len(sqlite_insert_query)
         sqlite_insert_query = sqlite_insert_query[:(lastC-1)]
@@ -43,15 +43,17 @@ try:
     cursor.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='users' ''')
     if cursor.fetchone()[0]==1:
         print('Table exists.')
-    else:
-        sqlite_create_table_query = '''CREATE TABLE users (
-                                id INTEGER PRIMARY KEY,
-                                username TEXT NOT NULL,
-                                image_url TEXT NOT NULL,
-                                type TEXT NOT NULL,
-                                link TEXT NOT NULL);'''
-        cursor.execute(sqlite_create_table_query)
+        cursor.execute('''DROP TABLE users''')
         sqliteConnection.commit()
+
+    sqlite_create_table_query = '''CREATE TABLE users (
+                            id INTEGER PRIMARY KEY,
+                            username TEXT NOT NULL,
+                            image_url TEXT NOT NULL,
+                            type TEXT NOT NULL,
+                            link TEXT NOT NULL);'''
+    cursor.execute(sqlite_create_table_query)
+    sqliteConnection.commit()
 
     print("Introduce a total of users")
     total = input()
